@@ -17,16 +17,15 @@
         }
         .vas-line {
             position: relative;
-            width: 100%;
-            max-width: 600px;
-            height: 15px; /* 線を半分の太さに */
+            width: 25%; /* VASの線を1/4に変更 */
+            height: 15px; /* 線の太さ */
             background-color: black;
             cursor: pointer;
         }
         .highlight-line {
             position: absolute;
             width: 2px; /* 縦線の太さ */
-            height: 100%;
+            height: 100%; /* 縦線の高さを100%にして長くする */
             background-color: red; /* 縦線の色 */
             display: none; /* 初期状態では非表示 */
         }
@@ -62,7 +61,7 @@
                 // 縦画面の場合
 
                 errorMessage.style.display = 'block';
-                vasLine.style.display = 'none';
+                vasLine.style.display = 'none;
             }
         }
 
@@ -85,8 +84,7 @@
             highlightLine.style.display = 'block';
             setTimeout(() => {
                 highlightLine.style.display = 'none';
-            }, 100); // 100ミリ秒後に非表示にする
-
+            }, 1000); // 1000ミリ秒後に非表示にする（1秒）
             handleInteraction(event);
         });
 
@@ -94,8 +92,7 @@
             highlightLine.style.display = 'block';
             setTimeout(() => {
                 highlightLine.style.display = 'none';
-            }, 100); // 100ミリ秒後に非表示にする
-
+            }, 1000); // 1000ミリ秒後に非表示にする（1秒）
             handleInteraction(event);
         });
     </script>
