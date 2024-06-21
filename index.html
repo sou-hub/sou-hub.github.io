@@ -25,9 +25,11 @@
         .highlight-line {
             position: absolute;
             width: 2px; /* 縦線の太さ */
-            height: 100%; /* 縦線の高さを100%にして長くする */
+            height: 100vh; /* 縦
+線を画面全体の高さにする */
             background-color: red; /* 縦線の色 */
             display: none; /* 初期状態では非表示 */
+            top: -50vh; /* 縦線を上下に広げるため */
         }
         @media (max-width: 600px) {
             .vas-line {
@@ -53,7 +55,8 @@
 
         function checkOrientation() {
             if (window.innerWidth > window.innerHeight) {
-                // 横画面の場合
+               
+ // 横画面の場合
 
                 errorMessage.style.display = 'none';
                 vasLine.style.display = 'block';
@@ -61,7 +64,7 @@
                 // 縦画面の場合
 
                 errorMessage.style.display = 'block';
-                vasLine.style.display = 'none;
+                vasLine.style.display = 'none';
             }
         }
 
@@ -76,25 +79,19 @@
         function handleInteraction(event) {
             const rect = vasLine.getBoundingClientRect();
             const offsetX = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
-            const selectedValue = Math.round((offsetX / rect.width) * 100);
-            window.location.href = `result.html?value=${selectedValue}`;
+            highlightLine.style.left = `${offsetX}px`;
+            highlightLine.style.display = 'block';
+
+            setTimeout(() => {
+                highlightLine.style.display = 'none';
+                const selectedValue = Math.round((offsetX / rect.width) * 100);
+                window.location.href = `
+result.html?value=${selectedValue}`;
+            }, 1000); // 1000ミリ秒後にページを遷移する（1秒）
         }
 
-        vasLine.addEventListener('click', function(event) {
-            highlightLine.style.display = 'block';
-            setTimeout(() => {
-                highlightLine.style.display = 'none';
-            }, 1000); // 1000ミリ秒後に非表示にする（1秒）
-            handleInteraction(event);
-        });
-
-        vasLine.addEventListener('touchstart', function(event) {
-            highlightLine.style.display = 'block';
-            setTimeout(() => {
-                highlightLine.style.display = 'none';
-            }, 1000); // 1000ミリ秒後に非表示にする（1秒）
-            handleInteraction(event);
-        });
+        vasLine.addEventListener('click', handleInteraction);
+        vasLine.addEventListener('touchstart', handleInteraction);
     </script>
 </body>
 </html>
