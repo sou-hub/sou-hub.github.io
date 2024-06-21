@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,
- initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VAS Implementation - Step 1</title>
     <style>
         body {
@@ -15,6 +13,7 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            text-align: center;
         }
         .vas-line {
             width: 100%;
@@ -26,28 +25,39 @@
         }
         @media (max-width: 600px) {
             .vas-line {
+
                 height: 25px; /* 携帯画面ではこれくらい */
             }
+        }
+        .error-message {
+            color: red;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="vas-line" id="vasLine"></div>
+    <div class="error-message" id="errorMessage"></div>
 
     <script>
         // 画面の向きを横に固定
 
+        const errorMessage = document.getElementById('errorMessage');
+
         if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock('land
-scape').catch(function(error) {
+            screen.orientation.lock('landscape').catch(function(error) {
                 console.log('Orientation lock failed: ', error);
+                errorMessage.textContent = '横画面に手動で設定してください。';
             });
+        } else {
+            errorMessage.textContent = '横画面に手動で設定してください。';
         }
 
         const vasLine = document.getElementById('vasLine');
 
         function handleInteraction(event) {
-            const rect = vasLine.getBoundingClientRect();
+            const rect = vasLine.get
+BoundingClientRect();
             const offsetX = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
             const selectedValue = Math.round((offsetX / rect.width) * 100);
             window.location.href = `result.html?value=${selectedValue}`;
