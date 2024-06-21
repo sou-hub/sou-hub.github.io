@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,
+ initial-scale=1.0">
     <title>VAS Implementation - Step 1</title>
     <style>
         body {
@@ -17,23 +19,31 @@
         .vas-line {
             width: 100%;
             max-width: 600px;
-            height: 30px; /* 線を太く */
+            height: 15px; /* 線を半分の太さに */
             background-color: black;
             position: relative;
             cursor: pointer;
         }
         @media (max-width: 600px) {
             .vas-line {
-                height: 10px; /* 携帯画面ではさらに太く */
+                height: 25px; /* 携帯画面ではこれくらい */
             }
         }
     </style>
 </head>
 <body>
-
     <div class="vas-line" id="vasLine"></div>
 
     <script>
+        // 画面の向きを横に固定
+
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('land
+scape').catch(function(error) {
+                console.log('Orientation lock failed: ', error);
+            });
+        }
+
         const vasLine = document.getElementById('vasLine');
 
         function handleInteraction(event) {
