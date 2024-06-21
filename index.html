@@ -16,18 +16,23 @@
             text-align: center;
         }
         .vas-line {
+            position: relative;
             width: 100%;
             max-width: 600px;
             height: 15px; /* 線を半分の太さに */
             background-color: black;
-            position: relative;
             cursor: pointer;
+        }
+        .highlight-line {
+            position: absolute;
+            width: 2px; /* 縦線の太さ */
+            height: 100%;
+            background-color: red; /* 縦線の色 */
             display: none; /* 初期状態では非表示 */
         }
         @media (max-width: 600px) {
             .vas-line {
-                height:
- 25px; /* 携帯画面ではこれくらい */
+                height: 25px; /* 携帯画面ではこれくらい */
             }
         }
         .error-message {
@@ -37,11 +42,14 @@
     </style>
 </head>
 <body>
-    <div class="vas-line" id="vasLine"></div>
+    <div class="vas-line" id="vasLine">
+        <div class="highlight-line" id="highlightLine"></div>
+    </div>
     <div class="error-message" id="errorMessage">横画面にしてください。</div>
 
     <script>
         const vasLine = document.getElementById('vasLine');
+        const highlightLine = document.getElementById('highlightLine');
         const errorMessage = document.getElementById('errorMessage');
 
         function checkOrientation() {
@@ -67,15 +75,29 @@
         window.addEventListener('resize', checkOrientation);
 
         function handleInteraction(event) {
-            const rect = vasLine
-.getBoundingClientRect();
+            const rect = vasLine.getBoundingClientRect();
             const offsetX = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
             const selectedValue = Math.round((offsetX / rect.width) * 100);
             window.location.href = `result.html?value=${selectedValue}`;
         }
 
-        vasLine.addEventListener('click', handleInteraction);
-        vasLine.addEventListener('touchstart', handleInteraction);
+        vasLine.addEventListener('click', function(event) {
+            highlightLine.style.display = 'block';
+            setTimeout(() => {
+                highlightLine.style.display = 'none';
+            }, 100); // 100ミリ秒後に非表示にする
+
+            handleInteraction(event);
+        });
+
+        vasLine.addEventListener('touchstart', function(event) {
+            highlightLine.style.display = 'block';
+            setTimeout(() => {
+                highlightLine.style.display = 'none';
+            }, 100); // 100ミリ秒後に非表示にする
+
+            handleInteraction(event);
+        });
     </script>
 </body>
 </html>
