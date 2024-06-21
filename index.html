@@ -15,6 +15,16 @@
             flex-direction: column;
             text-align: center;
         }
+        .date-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 16px;
+        }
+        .question {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
         .vas-line {
             width: 100%;
             max-width: 600px;
@@ -22,16 +32,28 @@
             background-color: black;
             position: relative;
             cursor: pointer;
-            display: none; /* 初期状態では非表示 */
+            display: none; /* 初
+期状態では非表示 */
         }
         .highlight-line {
             position: absolute;
             width: 2px; /* 縦線の太さ */
             height: 100vh; /* 縦線を画面全体の高さにする */
-            background-color
-: red; /* 縦線の色 */
+            background-color: red; /* 縦線の色 */
             display: none; /* 初期状態では非表示 */
             top: -50vh; /* 縦線を上下に広げるため */
+        }
+        .label-left {
+            position: absolute;
+            left: 0;
+            top: 100%;
+            transform: translateY(10px);
+        }
+        .label-right {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            transform: translateY(10px);
         }
         @media (max-width: 600px) {
             .vas-line {
@@ -41,13 +63,18 @@
         .error-message {
             color: red;
             margin-top: 20px;
-            display: none; /* 初期状態では非表示 */
+            display:
+ none; /* 初期状態では非表示 */
         }
     </style>
 </head>
 <body>
+    <div class="date-display" id="dateDisplay"></div>
+    <div class="question">ここに質問を表示します。</div>
     <div class="vas-line" id="vasLine">
         <div class="highlight-line" id="highlightLine"></div>
+        <div class="label-left">0</div>
+        <div class="label-right">100</div>
     </div>
     <div class="error-message" id="errorMessage">横画面にしてください。</div>
 
@@ -55,14 +82,15 @@
         const vasLine = document.getElementById('vasLine');
         const highlightLine = document.getElementById('highlightLine');
         const errorMessage = document.getElementById('errorMessage');
+        const dateDisplay = document.getElementById('dateDisplay');
 
         function checkOrientation() {
             if (window.innerWidth > window.innerHeight) {
-
                 // 横画面の場合
 
                 errorMessage.style.display = 'none';
-                vasLine.style.display = 'block';
+                vas
+Line.style.display = 'block';
             } else {
                 // 縦画面の場合
 
@@ -71,9 +99,16 @@
             }
         }
 
+        function updateDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            dateDisplay.textContent = now.toLocaleDateString('ja-JP', options);
+        }
+
         // 初回チェック
 
         checkOrientation();
+        updateDate();
 
         // 画面の向きが変わった時のイベントリスナー
 
@@ -86,12 +121,12 @@
             // 縦線の位置を設定して表示
 
             highlightLine.style.left = `${offsetX}px`;
+
             highlightLine.style.display = 'block';
 
             setTimeout(() => {
                 highlightLine.style.display = 'none';
-                const
- selectedValue = Math.round((offsetX / rect.width) * 100);
+                const selectedValue = Math.round((offsetX / rect.width) * 100);
                 window.location.href = `result.html?value=${selectedValue}`;
             }, 1000); // 1000ミリ秒後にページを遷移する（1秒）
         }
