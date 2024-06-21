@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html
+ lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +33,6 @@
 <body>
     <div class="value-display" id="valueDisplay"></div>
     <div class="button-container">
-
         <button id="retryButton">やり直す</button>
         <button id="okButton">OK</button>
     </div>
@@ -47,18 +47,45 @@
             return params;
         }
 
+        function encryptValue(value, date) {
+            const chars = 'ABCDEFGHIJ';
+            const shift1 = (date.getFullYear() + (date.getMonth() + 1) + date.getDate()) % 10;
+            const shift2 = (date.getFullYear() * (date.getMonth() + 1) + date.getDate()) % 10;
+            const shift3 = ((date.getFullYear() + (date.getMonth() + 1)) * date.getDate()) % 10;
+
+            const paddedValue = value.toString().padStart(3, '0');
+            let encryptedValue = '';
+
+            const shifts = [shift1, shift2, shift3];
+            for (let i = 0; i < paddedValue.length; i++) {
+                const num = parseInt(paddedValue[i]);
+                const charIndex = (num + shifts[i]) % 10;
+                encryptedValue += chars[charIndex];
+            }
+
+            return encryptedValue;
+        }
+
         const queryParams = getQueryParams();
         const valueDisplay = document.getElementById('valueDisplay');
-        valueDisplay.textContent = queryParams.value || 'No value selected';
+        const selectedValue = parseInt(queryParams.value, 10);
+
+        if (!isNaN(selectedValue)) {
+            const now = new Date();
+            const encryptedValue = encryptValue(selectedValue, now);
+            valueDisplay.textContent = encryptedValue;
+        } else {
+            valueDisplay.textContent = 'No value selected';
+        }
 
         document.getElementById('retryButton').addEventListener('click', function() {
             window.location.href = 'index.html';
         });
 
+
         document.getElementById('okButton').addEventListener('click', function() {
             window.location.href = 'thanks.html';
-       
- });
+        });
     </script>
 </body>
 </html>
