@@ -1,75 +1,103 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAS Implementation - Step 1</title>
-<style>
-body {
-font-family: Arial, sans-serif;
-margin: 20px;
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-flex-direction: column;
-text-align: center;
-}
-.vas-line {
-width: 100%;
-max-width: 600px;
-height: 15px; /* 線を半分の太さに */
-background-color: black;
-position: relative;
-cursor: pointer;
-display: none; /* 初期状態では非表示 */
-}
-@media (max-width: 600px) {
-.vas-line {
-height: 25px; /* 携帯画面ではこれくらい */
-}
-}
-.error-message {
-color: red;
-margin-top: 20px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAS Implementation - Step 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+        .vas-line {
+            width: 100%;
+            max-width: 600px;
+            height: 15px; /* 線の太さ */
+            background-color: black;
+            position: relative;
+            cursor: pointer;
+            display: none; /* 初期状態では非表示 */
+        }
+        .highlight-line {
+            position: absolute;
+            width: 2px; /* 縦線の太さ */
+            height: 100vh; /* 縦線を画面全体の高さにする */
+            background-color
+: red; /* 縦線の色 */
+            display: none; /* 初期状態では非表示 */
+            top: -50vh; /* 縦線を上下に広げるため */
+        }
+        @media (max-width: 600px) {
+            .vas-line {
+                height: 25px; /* 携帯画面ではこれくらい */
+            }
+        }
+        .error-message {
+            color: red;
+            margin-top: 20px;
+            display: none; /* 初期状態では非表示 */
+        }
+    </style>
 </head>
 <body>
-<div class="vas-line" id="vasLine"></div>
-<div class="error-message" id="errorMessage">横画面にしてください。</div>
+    <div class="vas-line" id="vasLine">
+        <div class="highlight-line" id="highlightLine"></div>
+    </div>
+    <div class="error-message" id="errorMessage">横画面にしてください。</div>
 
-<script>
-const vasLine = document.getElementById('vasLine');
-const errorMessage = document.getElementById('errorMessage');
+    <script>
+        const vasLine = document.getElementById('vasLine');
+        const highlightLine = document.getElementById('highlightLine');
+        const errorMessage = document.getElementById('errorMessage');
 
-function checkOrientation() {
-if (window.innerWidth > window.innerHeight) {
-// 横画面の場合
-errorMessage.style.display = 'none';
-vasLine.style.display = 'block';
-} else {
-// 縦画面の場合
-errorMessage.style.display = 'block';
-vasLine.style.display = 'none';
-}
-}
+        function checkOrientation() {
+            if (window.innerWidth > window.innerHeight) {
 
-// 初回チェック
-checkOrientation();
+                // 横画面の場合
 
-// 画面の向きが変わった時のイベントリスナー
-window.addEventListener('resize', checkOrientation);
+                errorMessage.style.display = 'none';
+                vasLine.style.display = 'block';
+            } else {
+                // 縦画面の場合
 
-function handleInteraction(event) {
-const rect = vasLine.getBoundingClientRect();
-const offsetX = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
-const selectedValue = Math.round((offsetX / rect.width) * 100);
-window.location.href = `result.html?value=${selectedValue}`;
-}
+                errorMessage.style.display = 'block';
+                vasLine.style.display = 'none';
+            }
+        }
 
-vasLine.addEventListener('click', handleInteraction);
-vasLine.addEventListener('touchstart', handleInteraction);
-</script>
+        // 初回チェック
+
+        checkOrientation();
+
+        // 画面の向きが変わった時のイベントリスナー
+
+        window.addEventListener('resize', checkOrientation);
+
+        function handleInteraction(event) {
+            const rect = vasLine.getBoundingClientRect();
+            const offsetX = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
+
+            // 縦線の位置を設定して表示
+
+            highlightLine.style.left = `${offsetX}px`;
+            highlightLine.style.display = 'block';
+
+            setTimeout(() => {
+                highlightLine.style.display = 'none';
+                const
+ selectedValue = Math.round((offsetX / rect.width) * 100);
+                window.location.href = `result.html?value=${selectedValue}`;
+            }, 1000); // 1000ミリ秒後にページを遷移する（1秒）
+        }
+
+        vasLine.addEventListener('click', handleInteraction);
+        vasLine.addEventListener('touchstart', handleInteraction);
+    </script>
 </body>
 </html>
