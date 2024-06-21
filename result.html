@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAS Implementation - Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .value-display {
+            font-size: 48px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="value-display" id="valueDisplay"></div>
+
+    <script>
+        function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split('&').forEach(pair => {
+                const [key, value] = pair.split('=');
+                params[key] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        const queryParams = getQueryParams();
+        const valueDisplay = document.getElementById('valueDisplay');
+        valueDisplay.textContent = queryParams.value || 'No value selected';
+    </script>
+</body>
+</html>
