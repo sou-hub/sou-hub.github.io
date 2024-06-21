@@ -26,8 +26,8 @@
         }
         @media (max-width: 600px) {
             .vas-line {
-                height
-: 25px; /* 携帯画面ではこれくらい */
+                height:
+ 25px; /* 携帯画面ではこれくらい */
             }
         }
         .error-message {
@@ -62,13 +62,13 @@
 
         checkOrientation();
 
-        // 画面の向きが変わった時のイベント
-リスナー
+        // 画面の向きが変わった時のイベントリスナー
 
         window.addEventListener('resize', checkOrientation);
 
         function handleInteraction(event) {
-            const rect = vasLine.getBoundingClientRect();
+            const rect = vasLine
+.getBoundingClientRect();
             const offsetX = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
             const selectedValue = Math.round((offsetX / rect.width) * 100);
             window.location.href = `result.html?value=${selectedValue}`;
