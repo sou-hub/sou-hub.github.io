@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAS Implementation - Step 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .vas-line {
+            width: 100%;
+            max-width: 600px;
+            height: 30px; /* 線を太く */
+            background-color: black;
+            position: relative;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .vas-line {
+                height: 50px; /* 携帯画面ではさらに太く */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vas-line" id="vasLine"></div>
+
+    <script>
+        const vasLine = document.getElementById('vasLine');
+
+        function handleInteraction(event) {
+            const rect = vasLine.getBoundingClientRect();
+            const offsetX = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
+            const selectedValue = Math.round((offsetX / rect.width) * 100);
+            window.location.href = `result.html?value=${selectedValue}`;
+        }
+
+        vasLine.addEventListener('click', handleInteraction);
+        vasLine.addEventListener('touchstart', handleInteraction);
+    </script>
+</body>
+</html>
