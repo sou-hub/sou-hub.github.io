@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -13,15 +12,30 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
         }
         .value-display {
             font-size: 48px;
+            margin-bottom: 20px;
         }
-
+        .button-container {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="value-display" id="valueDisplay"></div>
+    <div class="button-container">
+
+        <button id="retryButton">やり直す</button>
+        <button id="okButton">OK</button>
+    </div>
 
     <script>
         function getQueryParams() {
@@ -36,6 +50,15 @@
         const queryParams = getQueryParams();
         const valueDisplay = document.getElementById('valueDisplay');
         valueDisplay.textContent = queryParams.value || 'No value selected';
+
+        document.getElementById('retryButton').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+        document.getElementById('okButton').addEventListener('click', function() {
+            window.location.href = 'thanks.html';
+       
+ });
     </script>
 </body>
 </html>
